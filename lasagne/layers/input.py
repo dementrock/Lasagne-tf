@@ -2,7 +2,6 @@ from collections import OrderedDict
 
 import cgtcompat as theano
 import cgtcompat.tensor as T
-from cgtcompat.config import is_theano, is_cgt
 
 from .. import utils
 
