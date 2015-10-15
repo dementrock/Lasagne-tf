@@ -1,7 +1,8 @@
 from collections import OrderedDict
 
-import theano
-import theano.tensor as T
+import cgtcompat as theano
+import cgtcompat.tensor as T
+from cgtcompat.config import is_theano, is_cgt
 
 from .. import utils
 
@@ -52,9 +53,10 @@ class InputLayer(Layer):
         ndim = len(shape)
         if input_var is None:
             # create the right TensorType for the given number of dimensions
-            input_var_type = T.TensorType(theano.config.floatX, [False] * ndim)
+            #input_var_type = T.TensorType(theano.config.floatX, [False] * ndim)
+            #input_var_type = theano.compat.TensorType(theano.config.floatX, ndim, [False] * ndim)
             var_name = ("%s.input" % name) if name is not None else "input"
-            input_var = input_var_type(var_name)
+            input_var = theano.compat.tensor(theano.config.floatX, ndim, name=var_name)#, input_var_type(var_name)
         else:
             # ensure the given variable has the correct dimensionality
             if input_var.ndim != ndim:

@@ -1,5 +1,6 @@
 import numpy as np
-import theano.tensor as T
+import cgtcompat as theano
+import cgtcompat.tensor as T
 
 from .. import init
 from .. import nonlinearities
@@ -86,7 +87,7 @@ class DenseLayer(Layer):
 
         activation = T.dot(input, self.W)
         if self.b is not None:
-            activation = activation + self.b.dimshuffle('x', 0)
+            activation = T.broadcast('+', activation , T.dimshuffle(self.b, 'x', 0), 'xx,1x')
         return self.nonlinearity(activation)
 
 

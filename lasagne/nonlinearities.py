@@ -2,7 +2,8 @@
 Non-linear activation functions for artificial neurons.
 """
 
-import theano.tensor.nnet
+import cgtcompat as theano#.tensor.nnet as theano.tensor.nnet
+#import theano.tensor.nnet
 
 
 # sigmoid

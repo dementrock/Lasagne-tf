@@ -1,7 +1,7 @@
 import numpy as np
 
-import theano
-import theano.tensor as T
+import cgtcompat as theano
+import cgtcompat.tensor as T
 
 
 def floatX(arr):
@@ -276,7 +276,7 @@ def create_param(spec, shape, name=None):
             "Cannot create param with a non-positive shape dimension. "
             "Tried to create param with shape=%r, name=%r") % (shape, name))
 
-    if isinstance(spec, theano.compile.SharedVariable):
+    if theano.compat.is_shared(spec):
         # We cannot check the shape here, the shared variable might not be
         # initialized correctly yet. We can check the dimensionality
         # though. Note that we cannot assign a name here. We could assign
