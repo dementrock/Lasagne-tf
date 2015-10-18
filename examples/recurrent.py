@@ -7,11 +7,13 @@ sum of two numbers in a sequence of random numbers sampled uniformly from
 '''
 
 from __future__ import print_function
+import os
+os.environ['CGT_COMPAT_MODE'] = 'cgt'
 
 
 import numpy as np
-import theano
-import theano.tensor as T
+import cgtcompat as theano
+import cgtcompat.tensor as T
 import lasagne
 
 
@@ -128,7 +130,7 @@ def main(num_epochs=NUM_EPOCHS):
     # output after processing the entire input sequence.  For the forward
     # layer, this corresponds to the last value of the second (sequence length)
     # dimension.
-    l_forward_slice = lasagne.layers.SliceLayer(l_forward, -1, 1)
+    l_forward_slice = lasagne.layers.SliceLayer(l_forward, MAX_LENGTH-1, 1)
     # For the backwards layer, the first index actually corresponds to the
     # final output of the network, as it processes the sequence backwards.
     l_backward_slice = lasagne.layers.SliceLayer(l_backward, 0, 1)
@@ -143,9 +145,9 @@ def main(num_epochs=NUM_EPOCHS):
     # lasagne.layers.get_output produces a variable for the output of the net
     network_output = lasagne.layers.get_output(l_out)
     # The value we care about is the final value produced for each sequence
-    predicted_values = network_output[:, -1]
+    predicted_values = network_output[:, 0]
     # Our cost will be mean-squared error
-    cost = T.mean((predicted_values - target_values)**2)
+    cost = T.mean(T.square(predicted_values - target_values))
     # Retrieve all parameters from the network
     all_params = lasagne.layers.get_all_params(l_out)
     # Compute SGD updates for training

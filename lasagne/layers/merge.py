@@ -1,4 +1,4 @@
-import theano.tensor as T
+import cgtcompat.tensor as T
 
 from .base import MergeLayer
 

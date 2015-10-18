@@ -65,7 +65,7 @@ def as_theano_expression(input):
     Theano symbolic constant
         Theano constant version of `input`.
     """
-    if isinstance(input, theano.gof.Variable):
+    if theano.compat.is_variable(input):
         return input
     else:
         try:

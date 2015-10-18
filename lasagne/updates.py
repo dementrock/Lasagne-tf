@@ -63,8 +63,8 @@ from collections import OrderedDict
 
 import numpy as np
 
-import theano
-import theano.tensor as T
+import cgtcompat as theano
+import cgtcompat.tensor as T
 from . import utils
 
 __all__ = [
@@ -373,9 +373,9 @@ def adagrad(loss_or_grads, params, learning_rate=1.0, epsilon=1e-6):
     updates = OrderedDict()
 
     for param, grad in zip(params, grads):
-        value = param.get_value(borrow=True)
+        value = theano.compat.get_value(param, borrow=True)
         accu = theano.shared(np.zeros(value.shape, dtype=value.dtype),
-                             broadcastable=param.broadcastable)
+                             broadcastable=theano.compat.broadcastable(param))
         accu_new = accu + grad ** 2
         updates[accu] = accu_new
         updates[param] = param - (learning_rate * grad /

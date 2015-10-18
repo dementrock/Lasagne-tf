@@ -58,8 +58,8 @@ network with variable batch size and number of time steps.
 >>> l_out = ReshapeLayer(l_dense, (batchsize, seqlen, num_classes))
 """
 import numpy as np
-import theano
-import theano.tensor as T
+import cgtcompat as theano#theano
+import cgtcompat.tensor as T
 from .. import nonlinearities
 from .. import init
 from ..utils import unroll_scan
@@ -301,7 +301,7 @@ class CustomRecurrentLayer(MergeLayer):
             self.nonlinearity = nonlinearity
 
         # Initialize hidden state
-        if isinstance(hid_init, T.TensorVariable):
+        if theano.compat.is_tensor(hid_init):
             if hid_init.ndim != len(hidden_to_hidden.output_shape):
                 raise ValueError(
                     "When hid_init is provided as a TensorVariable, it should "
@@ -358,7 +358,7 @@ class CustomRecurrentLayer(MergeLayer):
         # Input should be provided as (n_batch, n_time_steps, n_features)
         # but scan requires the iterable dimension to be first
         # So, we need to dimshuffle to (n_time_steps, n_batch, n_features)
-        input = input.dimshuffle(1, 0, *range(2, input.ndim))
+        input = T.dimshuffle(input, 1, 0, *range(2, input.ndim))
         seq_len, num_batch = input.shape[0], input.shape[1]
 
         if self.precompute_input:
@@ -409,11 +409,11 @@ class CustomRecurrentLayer(MergeLayer):
             # Skip over any input with mask 0 by copying the previous
             # hidden state; proceed normally for any input with mask 1.
             hid = step(input_n, hid_previous, *args)
-            hid_out = hid*mask_n + hid_previous*(1 - mask_n)
+            hid_out = T.broadcast("*", hid, mask_n, "xx,x1") + T.broadcast("*", hid_previous, 1 - mask_n, "xx,x1")
             return [hid_out]
 
         if mask is not None:
-            mask = mask.dimshuffle(1, 0, 'x')
+            mask = T.dimshuffle(mask, 1, 0, 'x')
             sequences = [input, mask]
             step_fun = step_masked
         else:
@@ -421,7 +421,7 @@ class CustomRecurrentLayer(MergeLayer):
             step_fun = step
 
         # When hid_init is provided as a TensorVariable, use it as-is
-        if isinstance(self.hid_init, T.TensorVariable):
+        if theano.compat.is_tensor(self.hid_init):
             hid_init = self.hid_init
         else:
             # The code below simply repeats self.hid_init num_batch times in
@@ -444,6 +444,9 @@ class CustomRecurrentLayer(MergeLayer):
                 non_sequences=non_seqs,
                 n_steps=input_shape[1])[0]
         else:
+            input_shape = self.input_shapes[0]
+            n_steps = input_shape[1]
+            # If n_steps is None, calling scan will raise an error under cgt
             # Scan op iterates over first dimension of input and repeatedly
             # applies the step function
             hid_out = theano.scan(
@@ -453,10 +456,11 @@ class CustomRecurrentLayer(MergeLayer):
                 outputs_info=[hid_init],
                 non_sequences=non_seqs,
                 truncate_gradient=self.gradient_steps,
-                strict=True)[0]
+                strict=True,
+                n_steps=n_steps)[0]
 
         # dimshuffle back to (n_batch, n_time_steps, n_features))
-        hid_out = hid_out.dimshuffle(1, 0, *range(2, hid_out.ndim))
+        hid_out = T.dimshuffle(hid_out, 1, 0, *range(2, hid_out.ndim))
 
         # if scan is backward reverse the output
         if self.backwards:
@@ -1005,6 +1009,7 @@ class LSTMLayer(MergeLayer):
             step_fun = step
 
         ones = T.ones((num_batch, 1))
+        import ipdb; ipdb.set_trace()
         if isinstance(self.cell_init, T.TensorVariable):
             cell_init = self.cell_init
         else:

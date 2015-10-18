@@ -1,6 +1,6 @@
 from collections import deque
 
-import theano
+import cgtcompat as theano
 import numpy as np
 
 from .. import utils
