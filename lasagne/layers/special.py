@@ -1,5 +1,5 @@
-import theano
-import theano.tensor as T
+import cgtcompat as theano
+import cgtcompat.tensor as T
 
 from .. import init
 from .. import nonlinearities
