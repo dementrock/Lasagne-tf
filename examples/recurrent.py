@@ -16,6 +16,9 @@ import cgtcompat as theano
 import cgtcompat.tensor as T
 import lasagne
 
+np.random.seed(0)
+
+
 
 # Min/max sequence length
 MIN_LENGTH = 50
@@ -166,11 +169,13 @@ def main(num_epochs=NUM_EPOCHS):
     print("Training ...")
     try:
         for epoch in range(num_epochs):
+            import time
+            start_time = time.time()
             for _ in range(EPOCH_SIZE):
                 X, y, m = gen_data()
                 train(X, y, m)
             cost_val = compute_cost(X_val, y_val, mask_val)
-            print("Epoch {} validation cost = {}".format(epoch, cost_val))
+            print("Epoch {} validation cost = {}; spent {} seconds".format(epoch, cost_val, time.time() - start_time))
     except KeyboardInterrupt:
         pass
 
