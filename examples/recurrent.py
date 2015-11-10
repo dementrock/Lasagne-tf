@@ -8,7 +8,7 @@ sum of two numbers in a sequence of random numbers sampled uniformly from
 
 from __future__ import print_function
 import os
-os.environ['CGT_COMPAT_MODE'] = 'cgt'
+os.environ['CGT_COMPAT_MODE'] = 'tf'
 
 
 import numpy as np
@@ -140,7 +140,7 @@ def main(num_epochs=NUM_EPOCHS):
     l_out = lasagne.layers.DenseLayer(
         l_sum, num_units=1, nonlinearity=lasagne.nonlinearities.tanh)
 
-    target_values = T.vector('target_output')
+    target_values = T.vector('target_output', fixed_shape=(N_BATCH,))
 
     # lasagne.layers.get_output produces a variable for the output of the net
     network_output = lasagne.layers.get_output(l_out)

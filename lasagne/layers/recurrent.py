@@ -1009,7 +1009,6 @@ class LSTMLayer(MergeLayer):
             step_fun = step
 
         ones = T.ones((num_batch, 1))
-        import ipdb; ipdb.set_trace()
         if isinstance(self.cell_init, T.TensorVariable):
             cell_init = self.cell_init
         else:
