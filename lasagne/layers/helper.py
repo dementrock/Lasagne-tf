@@ -410,7 +410,7 @@ def get_all_param_values(layer, **tags):
     True
     """
     params = get_all_params(layer, **tags)
-    return [p.get_value() for p in params]
+    return [theano.compat.get_value(p) for p in params]
 
 
 def set_all_param_values(layer, values, **tags):
@@ -464,9 +464,9 @@ def set_all_param_values(layer, values, **tags):
                          (len(values), len(params)))
 
     for p, v in zip(params, values):
-        if p.get_value().shape != v.shape:
+        if theano.compat.get_value(p).shape != v.shape:
             raise ValueError("mismatch: parameter has shape %r but value to "
                              "set has shape %r" %
                              (p.get_value().shape, v.shape))
         else:
-            p.set_value(v)
+            theano.compat.set_value(p, v)
