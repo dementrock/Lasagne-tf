@@ -1,6 +1,6 @@
 import numpy as np
-import cgtcompat as theano
-import cgtcompat.tensor as T
+import tensorfuse as theano
+import tensorfuse.tensor as T
 
 from .. import init
 from .. import nonlinearities

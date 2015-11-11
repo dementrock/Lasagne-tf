@@ -8,12 +8,12 @@ sum of two numbers in a sequence of random numbers sampled uniformly from
 
 from __future__ import print_function
 import os
-os.environ['CGT_COMPAT_MODE'] = 'tf'
+os.environ['TENSORFUSE_MODE'] = 'tf'
 
 
 import numpy as np
-import cgtcompat as theano
-import cgtcompat.tensor as T
+import tensorfuse as theano
+import tensorfuse.tensor as T
 import lasagne
 
 np.random.seed(0)

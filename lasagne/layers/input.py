@@ -1,7 +1,7 @@
 from collections import OrderedDict
 
-import cgtcompat as theano
-import cgtcompat.tensor as T
+import tensorfuse as theano
+import tensorfuse.tensor as T
 
 from .. import utils
 

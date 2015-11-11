@@ -1,4 +1,4 @@
-import cgtcompat.tensor as T
+import tensorfuse.tensor as T
 
 from .base import MergeLayer
 

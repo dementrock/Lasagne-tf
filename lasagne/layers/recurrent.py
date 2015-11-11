@@ -58,8 +58,8 @@ network with variable batch size and number of time steps.
 >>> l_out = ReshapeLayer(l_dense, (batchsize, seqlen, num_classes))
 """
 import numpy as np
-import cgtcompat as theano#theano
-import cgtcompat.tensor as T
+import tensorfuse as theano#theano
+import tensorfuse.tensor as T
 from .. import nonlinearities
 from .. import init
 from ..utils import unroll_scan

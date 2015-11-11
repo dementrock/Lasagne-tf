@@ -2,7 +2,7 @@
 Non-linear activation functions for artificial neurons.
 """
 
-import cgtcompat as theano#.tensor.nnet as theano.tensor.nnet
+import tensorfuse as theano#.tensor.nnet as theano.tensor.nnet
 #import theano.tensor.nnet
 
 
