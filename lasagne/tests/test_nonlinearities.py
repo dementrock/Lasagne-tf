@@ -16,6 +16,12 @@ class TestNonlinearities(object):
     def leaky_rectify_0(self, x):
         return self.rectify(x)
 
+    def elu(self, x, alpha=1):
+        return np.where(x > 0, x, alpha * (np.exp(x) - 1))
+
+    def softplus(self, x):
+        return np.log1p(np.exp(x))
+
     def sigmoid(self, x):
         return 1 / (1 + np.exp(-x))
 
@@ -33,10 +39,10 @@ class TestNonlinearities(object):
 
     @pytest.mark.parametrize('nonlinearity',
                              ['linear', 'rectify',
-                              'leaky_rectify', 'sigmoid',
+                              'leaky_rectify', 'elu', 'sigmoid',
                               'tanh', 'scaled_tanh',
                               'softmax', 'leaky_rectify_0',
-                              'scaled_tanh_p'])
+                              'scaled_tanh_p', 'softplus'])
     def test_nonlinearity(self, nonlinearity):
         import lasagne.nonlinearities
 
