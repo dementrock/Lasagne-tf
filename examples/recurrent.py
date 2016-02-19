@@ -8,13 +8,13 @@ sum of two numbers in a sequence of random numbers sampled uniformly from
 
 from __future__ import print_function
 import os
-os.environ['TENSORFUSE_MODE'] = 'theano'
+os.environ['TENSORFUSE_MODE'] = 'tensorflow'
 
 
 import numpy as np
 import tensorfuse as theano
 import tensorfuse.tensor as T
-import lasagne
+import lasagne_tf as lasagne
 
 np.random.seed(0)
 

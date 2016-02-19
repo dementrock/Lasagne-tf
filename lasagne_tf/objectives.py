@@ -77,7 +77,7 @@ This gives a loss expression good for monitoring validation error.
 
 import theano.tensor.nnet
 
-from lasagne.layers import get_output
+from .layers import get_output
 
 __all__ = [
     "binary_crossentropy",

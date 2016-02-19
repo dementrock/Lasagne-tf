@@ -9,7 +9,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 try:
     # obtain version string from __init__.py
     # Read ASCII file with builtin open() so __version__ is str in Python 2 and 3
-    with open(os.path.join(here, 'lasagne', '__init__.py'), 'r') as f:
+    with open(os.path.join(here, 'lasagne_tf', '__init__.py'), 'r') as f:
         init_py = f.read()
     version = re.search('__version__ = "(.*)"', init_py).groups()[0]
 except Exception:
@@ -37,7 +37,7 @@ tests_require = [
     ]
 
 setup(
-    name="Lasagne",
+    name="Lasagne_tf",
     version=version,
     description="A lightweight library to build and train neural networks "
                 "in Theano",
