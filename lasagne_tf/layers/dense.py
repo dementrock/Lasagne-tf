@@ -83,7 +83,7 @@ class DenseLayer(Layer):
         if input.ndim > 2:
             # if the input has more than two dimensions, flatten it into a
             # batch of feature vectors.
-            input = input.flatten(2)
+            input = T.flatten(input, 2)
 
         activation = T.dot(input, self.W)
         if self.b is not None:

@@ -4,7 +4,7 @@ Alternative convolution implementations for Theano
 
 import numpy as np
 
-import theano.tensor as T
+import tensorfuse.tensor as T
 
 
 # 1D convolutions

@@ -62,6 +62,7 @@ class InputLayer(Layer):
             #input_var_type = theano.compat.TensorType(theano.config.floatX, ndim, [False] * ndim)
             var_name = ("%s.input" % name) if name is not None else "input"
             input_var = theano.compat.tensor(theano.config.floatX, ndim, name=var_name, fixed_shape=shape)#, input_var_type(var_name)
+            import ipdb; ipdb.set_trace()
         else:
             # ensure the given variable has the correct dimensionality
             if input_var.ndim != ndim:

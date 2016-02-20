@@ -48,7 +48,7 @@ Examples
 >>> l1_penalty = regularize_layer_params(layer2, l1) * 1e-4
 >>> loss = loss + l2_penalty + l1_penalty
 """
-import theano.tensor as T
+import tensorfuse.tensor as T
 from .layers import Layer, get_all_params
 
 

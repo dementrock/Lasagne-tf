@@ -284,9 +284,9 @@ def apply_nesterov_momentum(updates, params=None, momentum=0.9):
     updates = OrderedDict(updates)
 
     for param in params:
-        value = param.get_value(borrow=True)
+        value = theano.compat.get_value(param, borrow=True)
         velocity = theano.shared(np.zeros(value.shape, dtype=value.dtype),
-                                 broadcastable=param.broadcastable)
+                                 broadcastable=getattr(param, 'broadcastable', None))
         x = momentum * velocity + updates[param] - param
         updates[velocity] = x
         updates[param] = momentum * x + updates[param]

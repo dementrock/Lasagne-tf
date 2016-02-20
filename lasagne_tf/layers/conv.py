@@ -1,4 +1,4 @@
-import theano.tensor as T
+import tensorfuse.tensor as T
 
 from .. import init
 from .. import nonlinearities
@@ -261,7 +261,7 @@ class BaseConvLayer(Layer):
         elif self.untie_biases:
             activation = conved + T.shape_padleft(self.b, 1)
         else:
-            activation = conved + self.b.dimshuffle(('x', 0) + ('x',) * self.n)
+            activation = conved + T.dimshuffle(self.b, ('x', 0) + ('x',) * self.n)
 
         return self.nonlinearity(activation)
 

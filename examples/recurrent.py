@@ -8,7 +8,7 @@ sum of two numbers in a sequence of random numbers sampled uniformly from
 
 from __future__ import print_function
 import os
-os.environ['TENSORFUSE_MODE'] = 'tensorflow'
+os.environ['TENSORFUSE_MODE'] = 'theano'
 
 
 import numpy as np
@@ -153,10 +153,13 @@ def main(num_epochs=NUM_EPOCHS):
     updates = lasagne.updates.adagrad(cost, all_params, LEARNING_RATE)
     # Theano functions for training and computing cost
     print("Compiling functions ...")
+    import time
+    start_time = time.time()
     train = theano.function([l_in.input_var, target_values, l_mask.input_var],
                             cost, updates=updates)
     compute_cost = theano.function(
         [l_in.input_var, target_values, l_mask.input_var], cost)
+    print("compiling took %f seconds" % (time.time() - start_time))
 
     # We'll use this "validation set" to periodically check progress
     X_val, y_val, mask_val = gen_data()

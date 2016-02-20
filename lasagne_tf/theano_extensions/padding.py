@@ -2,7 +2,7 @@
 Padding
 """
 
-import theano.tensor as T
+import tensorfuse.tensor as T
 
 
 def pad(x, width, val=0, batch_ndim=1):

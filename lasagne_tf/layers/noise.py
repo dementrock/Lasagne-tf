@@ -1,9 +1,9 @@
-import theano
+import tensorfuse as theano
 
 from .base import Layer
 from ..random import get_rng
 
-from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
+# from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 
 
 __all__ = [
@@ -54,7 +54,7 @@ class DropoutLayer(Layer):
     """
     def __init__(self, incoming, p=0.5, rescale=True, **kwargs):
         super(DropoutLayer, self).__init__(incoming, **kwargs)
-        self._srng = RandomStreams(get_rng().randint(1, 2147462579))
+        # self._srng = RandomStreams(get_rng().randint(1, 2147462579))
         self.p = p
         self.rescale = rescale
 
@@ -79,8 +79,8 @@ class DropoutLayer(Layer):
             if any(s is None for s in input_shape):
                 input_shape = input.shape
 
-            return input * self._srng.binomial(input_shape, p=retain_prob,
-                                               dtype=theano.config.floatX)
+            return input * theano.random.binomial(input_shape, p=retain_prob,
+                                                  dtype=theano.config.floatX)
 
 dropout = DropoutLayer  # shortcut
 
@@ -112,7 +112,7 @@ class GaussianNoiseLayer(Layer):
     """
     def __init__(self, incoming, sigma=0.1, **kwargs):
         super(GaussianNoiseLayer, self).__init__(incoming, **kwargs)
-        self._srng = RandomStreams(get_rng().randint(1, 2147462579))
+        # self._srng = RandomStreams(get_rng().randint(1, 2147462579))
         self.sigma = sigma
 
     def get_output_for(self, input, deterministic=False, **kwargs):
@@ -127,6 +127,6 @@ class GaussianNoiseLayer(Layer):
         if deterministic or self.sigma == 0:
             return input
         else:
-            return input + self._srng.normal(input.shape,
-                                             avg=0.0,
-                                             std=self.sigma)
+            return input + theano.random.normal(input.shape,
+                                                avg=0.0,
+                                                std=self.sigma)

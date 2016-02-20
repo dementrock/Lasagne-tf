@@ -75,7 +75,7 @@ without dropout or any other nondeterministic computation in between:
 This gives a loss expression good for monitoring validation error.
 """
 
-import theano.tensor.nnet
+import tensorfuse as theano
 
 from .layers import get_output
 

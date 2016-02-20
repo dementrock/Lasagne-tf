@@ -6,7 +6,7 @@ from .. import nonlinearities
 from ..utils import as_tuple
 from ..random import get_rng
 from .base import Layer, MergeLayer
-from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
+# from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 
 
 __all__ = [

@@ -1,9 +1,9 @@
-import theano.tensor as T
+import tensorfuse.tensor as T
 
 from .base import Layer
 from ..utils import as_tuple
 
-from theano.tensor.signal import downsample
+from tensorfuse.tensor.signal import downsample
 
 
 __all__ = [

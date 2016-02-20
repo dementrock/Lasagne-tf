@@ -1,5 +1,5 @@
 import numpy as np
-import theano.tensor as T
+import tensorfuse.tensor as T
 
 from .. import init
 from .base import Layer

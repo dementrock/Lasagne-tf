@@ -16,13 +16,14 @@ from __future__ import print_function
 
 import sys
 import os
+os.environ['TENSORFUSE_MODE'] = 'cgt'
 import time
 
 import numpy as np
-import theano
-import theano.tensor as T
+import tensorfuse as theano
+import tensorfuse.tensor as T
 
-import lasagne
+import lasagne_tf as lasagne
 
 
 # ################## Download and prepare the MNIST dataset ##################
@@ -234,7 +235,7 @@ def main(model='mlp', num_epochs=500):
     X_train, y_train, X_val, y_val, X_test, y_test = load_dataset()
 
     # Prepare Theano variables for inputs and targets
-    input_var = T.tensor4('inputs')
+    input_var = T.tensor4('inputs', fixed_shape=(128,) + X_train.shape[1:])
     target_var = T.ivector('targets')
 
     # Create neural network model (depending on first command line parameter)
@@ -255,7 +256,7 @@ def main(model='mlp', num_epochs=500):
     # to minimize (for our multi-class problem, it is the cross-entropy loss):
     prediction = lasagne.layers.get_output(network)
     loss = lasagne.objectives.categorical_crossentropy(prediction, target_var)
-    loss = loss.mean()
+    loss = T.mean(loss)
     # We could add some weight decay as well here, see lasagne.regularization.
 
     # Create update expressions for training, i.e., how to modify the
@@ -271,10 +272,12 @@ def main(model='mlp', num_epochs=500):
     test_prediction = lasagne.layers.get_output(network, deterministic=True)
     test_loss = lasagne.objectives.categorical_crossentropy(test_prediction,
                                                             target_var)
-    test_loss = test_loss.mean()
+    test_loss = T.mean(test_loss)
     # As a bonus, also create an expression for the classification accuracy:
-    test_acc = T.mean(T.eq(T.argmax(test_prediction, axis=1), target_var),
-                      dtype=theano.config.floatX)
+    test_acc = T.mean(T.cast(T.eq(
+        T.cast(T.argmax(test_prediction, axis=1), 'int32'),
+        T.cast(target_var, 'int32')
+    ), theano.config.floatX))
 
     # Compile a function performing a training step on a mini-batch (by giving
     # the updates dictionary) and returning the corresponding training loss:
@@ -291,7 +294,7 @@ def main(model='mlp', num_epochs=500):
         train_err = 0
         train_batches = 0
         start_time = time.time()
-        for batch in iterate_minibatches(X_train, y_train, 500, shuffle=True):
+        for batch in iterate_minibatches(X_train, y_train, 128, shuffle=True):
             inputs, targets = batch
             train_err += train_fn(inputs, targets)
             train_batches += 1
@@ -300,7 +303,7 @@ def main(model='mlp', num_epochs=500):
         val_err = 0
         val_acc = 0
         val_batches = 0
-        for batch in iterate_minibatches(X_val, y_val, 500, shuffle=False):
+        for batch in iterate_minibatches(X_val, y_val, 128, shuffle=False):
             inputs, targets = batch
             err, acc = val_fn(inputs, targets)
             val_err += err
@@ -319,7 +322,7 @@ def main(model='mlp', num_epochs=500):
     test_err = 0
     test_acc = 0
     test_batches = 0
-    for batch in iterate_minibatches(X_test, y_test, 500, shuffle=False):
+    for batch in iterate_minibatches(X_test, y_test, 128, shuffle=False):
         inputs, targets = batch
         err, acc = val_fn(inputs, targets)
         test_err += err

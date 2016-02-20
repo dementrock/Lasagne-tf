@@ -9,7 +9,7 @@ Please make sure you install a recent enough version of Theano. Note that a
 simple 'pip install theano' will usually give you a version that is too old
 for Lasagne. See the installation docs for more details:
 http://lasagne.readthedocs.org/en/latest/user/installation.html#theano"""
-    import theano
+    import tensorfuse as theano
 except ImportError:  # pragma: no cover
     raise ImportError("Could not import Theano." + install_instr)
 else:
