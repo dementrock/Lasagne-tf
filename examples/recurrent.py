@@ -8,7 +8,7 @@ sum of two numbers in a sequence of random numbers sampled uniformly from
 
 from __future__ import print_function
 import os
-os.environ['TENSORFUSE_MODE'] = 'theano'
+os.environ['TENSORFUSE_MODE'] = 'tensorflow'
 
 
 import numpy as np
